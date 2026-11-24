@@ -1,0 +1,493 @@
+
+chronotachygraphe_permis_d.html
+
+100 %
+!DOCTYPE html
+html lang=fr
+head
+meta charset=UTF-8
+meta name=viewport content=width=device-width, initial-scale=1.0
+titleSimulateur Chronotachygraphe VDO DTCO 4.1 - Permis Dtitle
+style
+  root {
+    --bg-dark #0f172a;
+    --panel-bg #1e293b;
+    --vdo-bezel #18181b;
+    --vdo-face #27272a;
+    --lcd-bg #8fa382;
+    --lcd-on #a3e635;
+    --lcd-ink #111a0e;
+    --accent #38bdf8;
+    --danger #ef4444;
+    --warn #f59e0b;
+    --ok #22c55e;
+  }
+   { box-sizing border-box; font-family 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body {
+    margin 0; padding 20px; background var(--bg-dark); color #f8fafc;
+    display flex; flex-direction column; align-items center; gap 20px;
+  }
+  h1 { margin 0; font-size 1.4rem; color #e2e8f0; text-align center; }
+  .subtitle { font-size 0.85rem; color #94a3b8; text-align center; margin-top -12px; }
+  .main-grid {
+    display grid; grid-template-columns 1fr; max-width 960px; width 100%; gap 20px;
+  }
+   VDO DTCO 4.1 1-DIN UNIT 
+  .dtco-unit {
+    background linear-gradient(180deg, #27272a 0%, #18181b 100%);
+    border 3px solid #3f3f46; border-radius 12px; padding 18px 22px;
+    box-shadow 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+    position relative;
+  }
+  .torx {
+    width 12px; height 12px; border-radius 50%; background #09090b;
+    border 1px solid #52525b; position absolute;
+  }
+  .torx.tl { top 8px; left 8px; } .torx.tr { top 8px; right 8px; }
+  .torx.bl { bottom 8px; left 8px; } .torx.br { bottom 8px; right 8px; }
+  .dtco-header {
+    display flex; justify-content space-between; align-items center;
+    margin-bottom 12px; padding 0 10px;
+  }
+  .vdo-brand { font-weight 800; letter-spacing 2px; font-size 1.1rem; color #f4f4f5; }
+  .vdo-model { font-size 0.75rem; color #a1a1aa; font-family monospace; }
+  .dtco-top-row {
+    display grid; grid-template-columns 110px 1fr 180px; gap 16px; align-items center;
+  }
+  @media (max-width 760px) {
+    .dtco-top-row { grid-template-columns 1fr; }
+  }
+   Printer 
+  .printer-bay {
+    background #09090b; border 1px solid #3f3f46; border-radius 6px; padding 8px;
+    display flex; flex-direction column; align-items center; gap 6px;
+  }
+  .printer-slot {
+    width 90%; height 6px; background #000; border-bottom 1px solid #52525b; border-radius 2px;
+  }
+  .printer-label { font-size 0.65rem; color #a1a1aa; text-transform uppercase; }
+   LCD Screen 
+  .lcd-frame {
+    background #09090b; padding 10px; border-radius 8px; border 2px solid #3f3f46;
+  }
+  .lcd-screen {
+    background #9eb384; color #0f170a; font-family 'Courier New', Courier, monospace;
+    font-weight 700; padding 10px 14px; border-radius 4px; min-height 76px;
+    display flex; flex-direction column; justify-content space-between;
+    box-shadow inset 0 2px 8px rgba(0,0,0,0.35);
+    font-size 1.05rem; line-height 1.35;
+  }
+  .lcd-line { display flex; justify-content space-between; white-space pre; }
+  .lcd-warn { background #111a0e; color #a3e635; padding 0 4px; }
+   Nav Buttons 
+  .nav-pad {
+    display grid; grid-template-columns repeat(4, 1fr); gap 6px;
+  }
+  .vdo-btn {
+    background #27272a; color #f4f4f5; border 1px solid #52525b; border-radius 6px;
+    padding 12px 6px; font-weight 700; cursor pointer; font-size 0.95rem;
+    box-shadow 0 3px 0 #09090b; transition transform 0.05s;
+  }
+  .vdo-btnactive { transform translateY(2px); box-shadow 0 1px 0 #09090b; }
+  .vdo-btn.ok { border-color #22c55e; color #86efac; }
+   Card Slots 
+  .slots-row {
+    display grid; grid-template-columns 1fr 1fr; gap 16px; margin-top 14px;
+  }
+  .slot-box {
+    background #121215; border 1px solid #3f3f46; border-radius 6px; padding 8px 12px;
+    display flex; justify-content space-between; align-items center; gap 8px;
+  }
+  .slot-slit {
+    flex 1; height 6px; background #000; border 1px solid #3f3f46; border-radius 3px;
+    position relative;
+  }
+  .slot-slit.inserted { background #38bdf8; box-shadow 0 0 8px rgba(56,189,248,0.5); }
+  .slot-btn {
+    background #3f3f46; color #fff; border none; border-radius 4px;
+    padding 5px 10px; font-size 0.78rem; cursor pointer;
+  }
+   Dashboard & Controls 
+  .dash-grid {
+    display grid; grid-template-columns 1fr 1fr; gap 16px;
+  }
+  @media (max-width 760px) { .dash-grid { grid-template-columns 1fr; } }
+  .card {
+    background var(--panel-bg); border 1px solid #334155; border-radius 10px; padding 16px;
+  }
+  .card h2 { margin 0 0 12px 0; font-size 1rem; color var(--accent); border-bottom 1px solid #334155; padding-bottom 6px; }
+  .btn-group { display flex; flex-wrap wrap; gap 8px; }
+  .ctrl-btn {
+    background #334155; color #f8fafc; border 1px solid #475569; border-radius 6px;
+    padding 8px 12px; cursor pointer; font-size 0.85rem; font-weight 600;
+  }
+  .ctrl-btnhover { background #475569; }
+  .ctrl-btn.active { background #0284c7; border-color #38bdf8; }
+  .ctrl-btn.danger { background #7f1d1d; border-color #ef4444; }
+  .metrics { display grid; grid-template-columns repeat(2, 1fr); gap 10px; }
+  .metric { background #0f172a; padding 10px; border-radius 6px; border 1px solid #334155; }
+  .metric-label { font-size 0.75rem; color #94a3b8; }
+  .metric-val { font-size 1.15rem; font-weight 700; font-family monospace; margin-top 2px; }
+   Receipt 
+  .receipt {
+    background #f8fafc; color #0f172a; font-family 'Courier New', Courier, monospace;
+    padding 16px; border-radius 4px; white-space pre-wrap; font-size 0.82rem;
+    border-top 4px dashed #94a3b8; border-bottom 4px dashed #94a3b8;
+    max-height 360px; overflow-y auto; display none;
+  }
+  .receipt.visible { display block; }
+  .scenario-box {
+    background #0f172a; border-left 4px solid var(--warn); padding 10px 12px;
+    border-radius 4px; font-size 0.88rem; line-height 1.45; margin-top 10px;
+  }
+style
+head
+body
+
+h1Simulateur Chronotachygraphe Numérique — Permis D (RSE CE 5612006)h1
+p class=subtitleBoîtier VDO DTCO 4.1 • Transport de Voyageurs • Entraînement FIMO  FCO  Plateaup
+
+div class=main-grid
+  !-- VDO UNIT --
+  div class=dtco-unit
+    div class=torx tldivdiv class=torx trdiv
+    div class=torx bldivdiv class=torx brdiv
+    div class=dtco-header
+      span class=vdo-brandVDOspan
+      span class=vdo-modelDTCO 4.1 — 1224V — VOYAGEURS (CAT. D)span
+    div
+    div class=dtco-top-row
+      div class=printer-bay
+        div class=printer-slotdiv
+        span class=printer-labelImprimantespan
+        button class=slot-btn onclick=printTicket()Imprimer 24hbutton
+      div
+      div class=lcd-frame
+        div class=lcd-screen id=lcd
+          div class=lcd-linespan id=lcd-l11138  0 kmhspanspan id=lcd-l1r1 ⬜spandiv
+          div class=lcd-linespan id=lcd-l2C 00h00  P 00h00spanspan id=lcd-l2rFspandiv
+        div
+      div
+      div class=nav-pad
+        button class=vdo-btn onclick=pressKey('BACK') title=Retour  Éjection↩button
+        button class=vdo-btn onclick=pressKey('UP') title=Haut▲button
+        button class=vdo-btn onclick=pressKey('DOWN') title=Bas▼button
+        button class=vdo-btn ok onclick=pressKey('OK') title=Valider  MenuOKbutton
+      div
+    div
+    div class=slots-row
+      div class=slot-box
+        span style=font-size0.8rem;font-weight700;1 💳span
+        div class=slot-slit id=slit-1div
+        button class=slot-btn id=btn-card-1 onclick=toggleCard(1)Insérer Carte 1button
+      div
+      div class=slot-box
+        span style=font-size0.8rem;font-weight700;2 💳span
+        div class=slot-slit id=slit-2div
+        button class=slot-btn id=btn-card-2 onclick=toggleCard(2)Insérer Carte 2button
+      div
+    div
+  div
+
+  !-- DASHBOARD --
+  div class=dash-grid
+    div class=card
+      h2Poste de Conduite & Sélecteur d'Activitéh2
+      div class=btn-group style=margin-bottom12px;
+        button class=ctrl-btn active id=act-REST onclick=setActivity('REST')🛏️ Repos  Pausebutton
+        button class=ctrl-btn id=act-WORK onclick=setActivity('WORK')⚒️ Autre tâche (Contrôle)button
+        button class=ctrl-btn id=act-AVAIL onclick=setActivity('AVAIL')✉️ Disponibilitébutton
+        button class=ctrl-btn id=act-DRIVE onclick=setActivity('DRIVE')🛞 Conduite (85 kmh)button
+      div
+      div style=font-size0.8rem;color#94a3b8;margin-bottom6px;Accélération du temps (Simulation) div
+      div class=btn-group
+        button class=ctrl-btn onclick=advanceMinutes(15)+15 minbutton
+        button class=ctrl-btn onclick=advanceMinutes(30)+30 minbutton
+        button class=ctrl-btn onclick=advanceMinutes(45)+45 minbutton
+        button class=ctrl-btn onclick=advanceMinutes(60)+1h00button
+        button class=ctrl-btn onclick=advanceMinutes(255)+4h15button
+        button class=ctrl-btn danger onclick=resetSim()Réinitialiserbutton
+      div
+    div
+
+    div class=card
+      h2Compteurs RSE Permis D (Temps Réel)h2
+      div class=metrics
+        div class=metric
+          div class=metric-labelConduite continue (Max 4h30)div
+          div class=metric-val id=m-cont00h00div
+        div
+        div class=metric
+          div class=metric-labelConduite journalière (Max 9h10h)div
+          div class=metric-val id=m-day00h00div
+        div
+        div class=metric
+          div class=metric-labelPause validée (Fractionnée 15+30)div
+          div class=metric-val id=m-break00 mindiv
+        div
+        div class=metric
+          div class=metric-labelStatut Réglementairediv
+          div class=metric-val id=m-status style=color#22c55e;CONFORMEdiv
+        div
+      div
+    div
+  div
+
+  !-- SCENARIO & TICKET --
+  div class=card
+    h2Épreuves Pratiques Examen Permis D & Ticket Thermiqueh2
+    div class=btn-group
+      button class=ctrl-btn onclick=loadScenario(1)Scénario 1  Prise de service & Saisie manuellebutton
+      button class=ctrl-btn onclick=loadScenario(2)Scénario 2  Pause fractionnée (15' + 30')button
+      button class=ctrl-btn onclick=loadScenario(3)Scénario 3  Contrôle routier & Impressionbutton
+    div
+    div class=scenario-box id=scenario-text
+      Sélectionnez un scénario d'examen ci-dessus ou manipulez directement le boîtier VDO (insertion carte, choix activité, avance rapide).
+    div
+    pre class=receipt id=receipt-boxpre
+  div
+div
+
+script
+  const state = {
+    timeMin 8  60,  0800
+    card1 false,
+    card2 false,
+    activity 'REST',  DRIVE, WORK, AVAIL, REST
+    contDrive 0,
+    dayDrive 0,
+    breakPart1 false,
+    currentBreak 0,
+    menuMode 'MAIN',  MAIN, WIZARD_ENTRY, MENU_LIST, OUT_OF_SCOPE
+    wizardStep 0,
+    menuIdx 0,
+    country 'F',
+    outOfScope false,
+    events []
+  };
+
+  const menus = [
+    'Impression conducteur 1',
+    'Saisie debut pays (F)',
+    'Saisie fin pays (F)',
+    'Mode Hors Champ (OUT)',
+    'Ferry  Train'
+  ];
+
+  function fmtTime(m) {
+    const h = Math.floor((m % 1440)  60).toString().padStart(2, '0');
+    const min = (m % 60).toString().padStart(2, '0');
+    return `${h}${min}`;
+  }
+
+  function fmtDur(m) {
+    const h = Math.floor(m  60).toString().padStart(2, '0');
+    const min = (m % 60).toString().padStart(2, '0');
+    return `${h}h${min}`;
+  }
+
+  function actSymbol(a) {
+    return { DRIVE '🛞', WORK '⚒️', AVAIL '✉️', REST '🛏️' }[a]  '🛏️';
+  }
+
+  function toggleCard(slot) {
+    if (slot === 1) {
+      state.card1 = !state.card1;
+      document.getElementById('slit-1').classList.toggle('inserted', state.card1);
+      document.getElementById('btn-card-1').textContent = state.card1  'Éjecter Carte 1'  'Insérer Carte 1';
+      if (state.card1) {
+        state.menuMode = 'WIZARD_ENTRY';
+        state.wizardStep = 0;
+        logEvent('Insertion Carte Conducteur 1 (DUPONT J.)');
+      } else {
+        state.menuMode = 'MAIN';
+        logEvent('Éjection Carte Conducteur 1');
+      }
+    } else {
+      state.card2 = !state.card2;
+      document.getElementById('slit-2').classList.toggle('inserted', state.card2);
+      document.getElementById('btn-card-2').textContent = state.card2  'Éjecter Carte 2'  'Insérer Carte 2';
+      logEvent(state.card2  'Insertion Carte Convoyeur 2'  'Éjection Carte Convoyeur 2');
+    }
+    render();
+  }
+
+  function pressKey(key) {
+    if (state.menuMode === 'WIZARD_ENTRY') {
+      if (key === 'OK') {
+        state.wizardStep++;
+        if (state.wizardStep === 1) {
+           Confirm manual entry rest
+        } else if (state.wizardStep === 2) {
+           Confirm country F
+          state.menuMode = 'MAIN';
+          logEvent('Saisie manuelle validée  Repos jusqu'à ' + fmtTime(state.timeMin) + '  Début Pays ' + state.country);
+        }
+      } else if (key === 'BACK') {
+        state.menuMode = 'MAIN';
+      }
+      render();
+      return;
+    }
+
+    if (state.menuMode === 'MAIN') {
+      if (key === 'OK') {
+        state.menuMode = 'MENU_LIST';
+        state.menuIdx = 0;
+      }
+    } else if (state.menuMode === 'MENU_LIST') {
+      if (key === 'DOWN') state.menuIdx = (state.menuIdx + 1) % menus.length;
+      if (key === 'UP') state.menuIdx = (state.menuIdx - 1 + menus.length) % menus.length;
+      if (key === 'BACK') state.menuMode = 'MAIN';
+      if (key === 'OK') {
+        if (state.menuIdx === 0) printTicket();
+        if (state.menuIdx === 1) logEvent('Début pays enregistré  ' + state.country);
+        if (state.menuIdx === 2) logEvent('Fin pays enregistrée  ' + state.country);
+        if (state.menuIdx === 3) {
+          state.outOfScope = !state.outOfScope;
+          logEvent('Mode Hors Champ (OUT)  ' + (state.outOfScope  'ACTIVÉ'  'DÉSACTIVÉ'));
+        }
+        if (state.menuIdx === 4) logEvent('Symbole FerryTrain enregistré');
+        state.menuMode = 'MAIN';
+      }
+    }
+    render();
+  }
+
+  function setActivity(act) {
+    state.activity = act;
+    document.querySelectorAll('[id^=act-]').forEach(b = b.classList.remove('active'));
+    document.getElementById('act-' + act).classList.add('active');
+    if (act !== 'REST') state.currentBreak = 0;
+    logEvent('Changement activité  ' + act);
+    render();
+  }
+
+  function advanceMinutes(mins) {
+    state.timeMin += mins;
+    if (state.activity === 'DRIVE') {
+      state.contDrive += mins;
+      state.dayDrive += mins;
+      state.currentBreak = 0;
+    } else if (state.activity === 'REST') {
+      state.currentBreak += mins;
+      if (!state.breakPart1 && state.currentBreak = 15 && state.currentBreak  45) {
+        state.breakPart1 = true;
+      } else if (state.breakPart1 && state.currentBreak = 30) {
+        state.contDrive = 0;
+        state.breakPart1 = false;
+      } else if (state.currentBreak = 45) {
+        state.contDrive = 0;
+        state.breakPart1 = false;
+      }
+    }
+    logEvent(`+${mins} min en ${state.activity} (${fmtTime(state.timeMin)})`);
+    render();
+  }
+
+  function logEvent(txt) {
+    state.events.push(`${fmtTime(state.timeMin)} - ${txt}`);
+  }
+
+  function printTicket() {
+    const box = document.getElementById('receipt-box');
+    box.classList.add('visible');
+    box.textContent =
+`========================================
+      IMPRESSION JOURNALIERE 24H
+      VDO DTCO 4.1 - VOYAGEURS
+========================================
+DATE  24112026     HEURE  ${fmtTime(state.timeMin)} UTC
+CONDUCTEUR 1  DUPONT JEAN
+CARTE N°      F 00000012345678 01
+VEHICULE      AUTOCAR GRAND TOURISME
+IMMAT         AB-123-CD (F)
+----------------------------------------
+SYNTHESE DES ACTIVITES 
+- Conduite continue  ${fmtDur(state.contDrive)} (Max 04h30)
+- Conduite jour      ${fmtDur(state.dayDrive)} (Max 09h00)
+- Pause fractionnee  ${state.breakPart1  '1ere tranche 15m OK'  'Aucune'}
+- Hors champ (OUT)   ${state.outOfScope  'OUI'  'NON'}
+----------------------------------------
+HISTORIQUE DES OPERATIONS 
+${state.events.slice(-8).join('n')  'Aucune operation enregistree'}
+========================================`;
+  }
+
+  function loadScenario(n) {
+    const box = document.getElementById('scenario-text');
+    if (n === 1) {
+      box.innerHTML = 'strongÉpreuve 1  Prise de servicestrongbr1. Cliquez sur emInsérer Carte 1em.br2. Validez l'assistant de saisie manuelle avec strongOKstrong (Repos depuis dernière éjection) puis strongOKstrong (Début Pays F).br3. Sélectionnez emAutre tâche ⚒️em pour effectuer le tour du véhicule.';
+    } else if (n === 2) {
+      box.innerHTML = 'strongÉpreuve 2  Pause fractionnée obligatoire (15 min + 30 min)strongbr1. Passez en emConduiteem et avancez de strong+1h00strong.br2. Passez en emRepos 🛏️em et prenez une 1ère pause de strong+15 minstrong (tranche validée).br3. Reprenez la emConduiteem (+1h00), puis prenez la 2ème pause obligatoire de strong+30 minstrong (remise à zéro du compteur continu).';
+    } else {
+      box.innerHTML = 'strongÉpreuve 3  Contrôle routier & Impressionstrongbr1. Appuyez sur strongOKstrong sur le boîtier VDO.br2. Sélectionnez emImpression conducteur 1em et validez avec strongOKstrong (ou cliquez sur emImprimer 24hem) pour éditer le ticket.';
+    }
+  }
+
+  function resetSim() {
+    state.timeMin = 8  60;
+    state.contDrive = 0;
+    state.dayDrive = 0;
+    state.breakPart1 = false;
+    state.currentBreak = 0;
+    state.events = [];
+    document.getElementById('receipt-box').classList.remove('visible');
+    render();
+  }
+
+  function render() {
+    const l1 = document.getElementById('lcd-l1');
+    const l1r = document.getElementById('lcd-l1r');
+    const l2 = document.getElementById('lcd-l2');
+    const l2r = document.getElementById('lcd-l2r');
+
+    if (state.menuMode === 'WIZARD_ENTRY') {
+      if (state.wizardStep === 0) {
+        l1.textContent = 'SAISIE MANUELLE ';
+        l1r.textContent = '1 💳';
+        l2.textContent = '🛏️ 0000 - ' + fmtTime(state.timeMin);
+        l2r.textContent = 'OK';
+      } else {
+        l1.textContent = 'DEBUT PAYS  ' + state.country;
+        l1r.textContent = '1 💳';
+        l2.textContent = 'CONFIRMER ENTREE';
+        l2r.textContent = 'OK';
+      }
+    } else if (state.menuMode === 'MENU_LIST') {
+      l1.textContent = 'MENU PRINCIPAL';
+      l1r.textContent = `${state.menuIdx + 1}${menus.length}`;
+      l2.textContent = ' ' + menus[state.menuIdx];
+      l2r.textContent = 'OK';
+    } else {
+      const spd = state.activity === 'DRIVE'  '85 kmh'  ' 0 kmh';
+      l1.textContent = `${fmtTime(state.timeMin)}  ${spd}`;
+      l1r.textContent = state.card1  '1 💳'  '1 ⬜';
+      l2.textContent = `${actSymbol(state.activity)} C${fmtDur(state.contDrive)} J${fmtDur(state.dayDrive)}`;
+      l2r.textContent = state.outOfScope  'OUT'  state.country;
+    }
+
+    document.getElementById('m-cont').textContent = fmtDur(state.contDrive);
+    document.getElementById('m-day').textContent = fmtDur(state.dayDrive);
+    document.getElementById('m-break').textContent = state.breakPart1
+       `15m OK (+${state.currentBreak}m)`
+       `${state.currentBreak} min`;
+
+    const st = document.getElementById('m-status');
+    if (state.contDrive  270  state.dayDrive  600) {
+      st.textContent = 'INFRACTION RSE !';
+      st.style.color = '#ef4444';
+    } else if (state.contDrive = 255) {
+      st.textContent = 'ALERTE PAUSE (15m)';
+      st.style.color = '#f59e0b';
+    } else {
+      st.textContent = 'CONFORME';
+      st.style.color = '#22c55e';
+    }
+  }
+
+  render();
+script
+body
+html
+Affichage de chronotachygraphe_permis_d.html
